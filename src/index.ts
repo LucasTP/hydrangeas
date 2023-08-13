@@ -9,7 +9,7 @@ const path = require('path');
 
 const program = new Command();
 
-console.log(figlet.textSync('My React CLI'));
+console.log(figlet.textSync('Hydrangeas React CLI'));
 
 program
   .version('1.0.0')
