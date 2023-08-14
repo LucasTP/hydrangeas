@@ -2,7 +2,7 @@ name: "publish package to npm"
 
 on:
   push:
-    branches: [ 'release/v[0-9].[0-9]']
+    branches: [ 'master']
 
 jobs:
   publish:
