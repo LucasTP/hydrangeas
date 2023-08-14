@@ -1,40 +1,27 @@
-import { Command } from 'commander';
 import inquirer from 'inquirer';
 import * as fs from 'fs-extra';
 
-const generatePageCommand = new Command('generate:page')
-  .description('Generate a new page')
-  .action(async () => {
-    const { name } = await inquirer.prompt([
+import { basePath, getPageTemplate, toPascalCase } from './constant';
+
+export const generatePage = async (name: string) => {
+  console.log('Generating page...');
+  let pageName = name;
+  if (!name) {
+    const { inputName } = await inquirer.prompt([
       {
         type: 'input',
-        name: 'name',
+        input: 'name',
         message: 'Enter page name:',
       },
     ]);
 
-    const pageTemplate = `import React from 'react';
+    pageName = inputName;
+  }
 
-    type ${name}PageProps = {
-      // TODO: Add props
-    };
+  const pagePath = `${basePath}/pages/${pageName}Page.tsx`;
+  const template = getPageTemplate(pageName);
 
-    const ${name}Page: React.FC = () => {
-      return (
-        <div>
-          <h1>Hello ${name} Page</h1>
-        </div>
-      );
-    };
+  fs.outputFileSync(pagePath, template);
 
-    export default ${name}Page;
-    `;
-
-    const pagePath = `src/pages/${name}Page.tsx`;
-
-    fs.outputFileSync(pagePath, pageTemplate);
-
-    console.log(`Page ${name} generated successfully at ${pagePath}`);
-  });
-
-export default generatePageCommand;
+  console.log(`Page ${name} generated successfully at ${pagePath}`);
+};

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { Command } from 'commander';
 
-//import generatePageCommand from './generators/page';
+import { generatePage } from './generators/page';
 
 const figlet = require('figlet');
 const fs = require('fs');
@@ -15,17 +15,12 @@ program
   .version('1.0.0')
   .description('CLI for generating React components')
   .option('-l, --list [value]', 'List all files in the current directory')
-  .option('-g, --generate [value]', 'Generate a component')
-  .option('-p, --page <page>', 'Generate a page')
-  .option('-c, --component <component>', 'Generate a component')
-  .option('-r, --redux <redux>', 'Generate a redux component')
-  .option('-s, --style <style>', 'Generate a style')
-  .option('-t, --test <test>', 'Generate a test')
-  .option('-a, --all <all>', 'Generate all')
-  //.addCommand(generatePageCommand)
+  .option('-g, --generate [option] [value]', 'Generate page, component, redux')
   .parse(process.argv);
 
 const options = program.opts();
+
+const args = program.args;
 
 async function listDirContents(filePath: string) {
   try {
@@ -53,4 +48,22 @@ if (options.list) {
   const filePath =
     typeof options.list === 'string' ? options.list : process.cwd();
   listDirContents(filePath);
+}
+
+if (options.generate) {
+  const name = args.length > 0 ? args[0] : '';
+  switch (options.generate) {
+    case 'page':
+      generatePage(name.trim());
+      break;
+    case 'component':
+      console.log('Generating component');
+      break;
+    case 'redux':
+      console.log('Generating redux');
+      break;
+    default:
+      console.error('Unknown option for generate');
+      break;
+  }
 }
