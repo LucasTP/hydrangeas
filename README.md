@@ -23,12 +23,6 @@ CLI for generating React components
 Options:
   -V, --version                output the version number
   -l, --list [value]           List all files in the current directory
-  -g, --generate [value]       Generate a component
-  -p, --page <page>            Generate a page
-  -c, --component <component>  Generate a component
-  -r, --redux <redux>          Generate a redux component
-  -s, --style <style>          Generate a style
-  -t, --test <test>            Generate a test
-  -a, --all <all>              Generate all
+  -g, --generate [option] [name]       Generate file base on option: page, components, redux
   -h, --help                   display help for command
 ```

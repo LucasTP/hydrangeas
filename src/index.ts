@@ -15,7 +15,10 @@ program
   .version('1.0.0')
   .description('CLI for generating React components')
   .option('-l, --list [value]', 'List all files in the current directory')
-  .option('-g, --generate [option] [value]', 'Generate page, component, redux')
+  .option(
+    '-g, --generate [option] [name]',
+    'Generate file base on option: page, component, redux',
+  )
   .parse(process.argv);
 
 const options = program.opts();
