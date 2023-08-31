@@ -1,7 +1,15 @@
 export const basePath = `${process.cwd()}/src`;
 
+export enum EOptions {
+  Page = 'pages',
+  Component = 'components',
+  Redux = 'redux',
+}
+
 export const getPageTemplate = (name: string) => {
   return `import React from 'react';
+
+import { ${name}PageRoot } from './${name}PageStyle';
 
 type ${name}PageProps = {
   // TODO: Add props
@@ -12,13 +20,22 @@ const ${name}Page: React.FC = (props: ${name}PageProps) => {
   console.log(props);
 
   return (
-    <div>
+    <${name}PageRoot>
       <h1>Hello ${name} Page</h1>
-    </div>
+    </${name}PageRoot>
   );
 };
 
 export default ${name}Page;
+`;
+};
+
+export const getPageStyleTemplate = (name: string) => {
+  return `import styled from '@emotion/styled';
+
+export const ${name}PageRoot = styled.div\`
+  display: inline-flex;
+\`;
 `;
 };
 
@@ -43,4 +60,11 @@ export const toPascalCase = (str: string) => {
       ($1, $2, $3) => `${$2.toUpperCase() + $3}`,
     )
     .replace(new RegExp(/\w/), (s) => s.toUpperCase());
+};
+
+export const mergePath = (path: string[], type: EOptions): string => {
+  if (path[0] === type) {
+    return `${basePath}/${path.join('/')}`;
+  }
+  return `${basePath}/${type}/${path.join('/')}`;
 };
