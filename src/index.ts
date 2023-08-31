@@ -15,11 +15,11 @@ const prompt = inquirer.createPromptModule();
 console.log(figlet.textSync('Hydrangeas React CLI'));
 
 program
-  .version('1.0.0')
+  .version(require('../package.json').version)
   .description('CLI for generating React components')
-  .option('-l, --list [value]', 'List all files in the current directory')
+  .option('-L, --list [value]', 'List all files in the current directory')
   .option(
-    '-g, --generate [option] [name]',
+    '-G, --generate [option] [name]',
     'Generate files base on option: page, component, redux',
   )
   .parse(process.argv);
