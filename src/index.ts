@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 import { Command } from 'commander';
+import inquirer from 'inquirer';
 
+import { EOptions } from './generators/constant';
 import { generatePage } from './generators/page';
 
 const figlet = require('figlet');
@@ -8,6 +10,7 @@ const fs = require('fs');
 const path = require('path');
 
 const program = new Command();
+const prompt = inquirer.createPromptModule();
 
 console.log(figlet.textSync('Hydrangeas React CLI'));
 
@@ -17,13 +20,30 @@ program
   .option('-l, --list [value]', 'List all files in the current directory')
   .option(
     '-g, --generate [option] [name]',
-    'Generate file base on option: page, component, redux',
+    'Generate files base on option: page, component, redux',
   )
   .parse(process.argv);
 
 const options = program.opts();
 
 const args = program.args;
+
+function handleGenerateOption(option: string) {
+  switch (option) {
+    case EOptions.Page:
+      generatePage(args);
+      break;
+    case EOptions.Component:
+      console.log('Generating component');
+      break;
+    case EOptions.Redux:
+      console.log('Generating redux');
+      break;
+    default:
+      console.log('Invalid option');
+      break;
+  }
+}
 
 async function listDirContents(filePath: string) {
   try {
@@ -54,19 +74,31 @@ if (options.list) {
 }
 
 if (options.generate) {
-  const name = args.length > 0 ? args[0] : '';
   switch (options.generate) {
-    case 'page':
-      generatePage(name.trim());
+    case EOptions.Page:
+      if (args.length > 1) {
+        console.error('Invalid arguments');
+        break;
+      }
+      generatePage(args);
       break;
-    case 'component':
+    case EOptions.Component:
       console.log('Generating component');
       break;
-    case 'redux':
+    case EOptions.Redux:
       console.log('Generating redux');
       break;
     default:
-      console.error('Unknown option for generate');
+      const choices = Object.values(EOptions) as string[];
+      prompt({
+        type: 'list',
+        name: 'option',
+        choices,
+        message: 'Which type do you want to generate:',
+      }).then((answers) => {
+        const { option } = answers;
+        handleGenerateOption(option);
+      });
       break;
   }
 }
