@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { Command } from 'commander';
+import { Command, Option } from 'commander';
 import inquirer from 'inquirer';
 
 import { EOptions } from './generators/constant';
@@ -17,12 +17,22 @@ console.log(figlet.textSync('Hydrangeas React CLI'));
 program
   .version(require('../package.json').version)
   .description('CLI for generating React components')
-  .option('-L, --list [value]', 'List all files in the current directory')
-  .option(
-    '-G, --generate [option] [name]',
-    'Generate files base on option: page, component, redux',
+  .command('generate <schematic> <name> [options]')
+  .description(
+    'Generate files base on a schematic. Type `hydranges generate --help` for more information.',
   )
+  .option('-b, --basePath [value]', 'Custom base path for the generated files')
+  //.option(
+  //'-N, --name [value]',
+  //'Name of the component, page, redux, ... to be generated',
+  //)
+  //.option(
+  //'-C, --custom-base [value]',
+  //'Custom base path for the generated files',
+  //)
   .parse(process.argv);
+
+const generatePageCmd = program.commands[0];
 
 const options = program.opts();
 
@@ -34,10 +44,10 @@ function handleGenerateOption(option: string) {
       generatePage(args);
       break;
     case EOptions.Component:
-      console.log('Generating component');
+      console.log('Generating component comming soon.');
       break;
     case EOptions.Redux:
-      console.log('Generating redux');
+      console.log('Generating redux comming soon.');
       break;
     default:
       console.log('Invalid option');
@@ -45,60 +55,61 @@ function handleGenerateOption(option: string) {
   }
 }
 
-async function listDirContents(filePath: string) {
-  try {
-    const files = await fs.promises.readdir(filePath);
-    const detaildFilesPromises = files.map(async (file: File) => {
-      let fileDetails = await fs.promises.lstat(path.resolve(filePath, file));
-      const { size, birthtime } = fileDetails;
+//async function listDirContents(filePath: string) {
+//try {
+//const files = await fs.promises.readdir(filePath);
+//const detaildFilesPromises = files.map(async (file: File) => {
+//let fileDetails = await fs.promises.lstat(path.resolve(filePath, file));
+//const { size, birthtime } = fileDetails;
 
-      return {
-        filename: file,
-        'size(KB)': size,
-        created_at: birthtime,
-      };
-    });
+//return {
+//filename: file,
+//'size(KB)': size,
+//created_at: birthtime,
+//};
+//});
 
-    const detailedFiles = await Promise.all(detaildFilesPromises);
+//const detailedFiles = await Promise.all(detaildFilesPromises);
 
-    console.table(detailedFiles);
-  } catch (err) {
-    console.log('Error occured while reading the directory!', err);
-  }
-}
+//console.table(detailedFiles);
+//} catch (err) {
+//console.log('Error occured while reading the directory!', err);
+//}
+//}
 
-if (options.list) {
-  const filePath =
-    typeof options.list === 'string' ? options.list : process.cwd();
-  listDirContents(filePath);
-}
+//if (options.list) {
+//const filePath =
+//typeof options.list === 'string' ? options.list : process.cwd();
+//listDirContents(filePath);
+//}
 
-if (options.generate) {
-  switch (options.generate) {
-    case EOptions.Page:
-      if (args.length > 1) {
-        console.error('Invalid arguments');
-        break;
-      }
-      generatePage(args);
-      break;
-    case EOptions.Component:
-      console.log('Generating component');
-      break;
-    case EOptions.Redux:
-      console.log('Generating redux');
-      break;
-    default:
-      const choices = Object.values(EOptions) as string[];
-      prompt({
-        type: 'list',
-        name: 'option',
-        choices,
-        message: 'Which type do you want to generate:',
-      }).then((answers) => {
-        const { option } = answers;
-        handleGenerateOption(option);
-      });
-      break;
-  }
+//if (options.generate) {
+//switch (options.generate) {
+//case EOptions.Page:
+//generatePage(args);
+//break;
+//case EOptions.Component:
+//console.log('Generating component comming soon.');
+//break;
+//case EOptions.Redux:
+//console.log('Generating redux comming soon.');
+//break;
+//default:
+//const choices = Object.values(EOptions) as string[];
+//prompt({
+//type: 'list',
+//name: 'option',
+//choices,
+//message: 'Which type do you want to generate:',
+//}).then((answers) => {
+//const { option } = answers;
+//handleGenerateOption(option);
+//});
+//break;
+//}
+//}
+
+if (generatePageCmd) {
+  console.log(generatePageCmd.args);
+  console.log('Generating ...');
 }

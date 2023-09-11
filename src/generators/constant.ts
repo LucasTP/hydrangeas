@@ -62,9 +62,13 @@ export const toPascalCase = (str: string) => {
     .replace(new RegExp(/\w/), (s) => s.toUpperCase());
 };
 
-export const mergePath = (path: string[], type: EOptions): string => {
+export const mergePath = (
+  path: string[],
+  type: EOptions,
+  customBasePath = 'src',
+): string => {
   if (path[0] === type) {
-    return `${basePath}/${path.join('/')}`;
+    return `${basePath}/${customBasePath}/${path.join('/')}`;
   }
-  return `${basePath}/${type}/${path.join('/')}`;
+  return `${basePath}/${customBasePath}/${type}/${path.join('/')}`;
 };

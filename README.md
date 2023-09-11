@@ -26,3 +26,10 @@ Options:
   -G, --generate [option] [name]       Generate file base on option: page, components, redux
   -h, --help                           Display help for command
 ```
+
+Generate Page
+
+```bash
+// base path: src
+hydrangeas -g page pages/Rider
+```
